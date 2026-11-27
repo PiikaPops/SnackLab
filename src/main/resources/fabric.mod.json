@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "snacklab",
+  "version": "${version}",
+  "name": "Snack Lab",
+  "description": "Crée en un clic les Poké Snacks et Poké Appâts assaisonnés de Cobblemon, exactement comme la marmite. Fonctionne en mode créatif, ou avec la permission /give.",
+  "authors": ["Popi"],
+  "license": "All-Rights-Reserved",
+  "environment": "client",
+  "entrypoints": {
+    "client": ["fr.coquelicot.snacklab.SnackLabClient"]
+  },
+  "depends": {
+    "fabricloader": ">=0.16.0",
+    "minecraft": "~1.21.1",
+    "fabric-api": "*",
+    "cobblemon": ">=1.8.0"
+  }
+}

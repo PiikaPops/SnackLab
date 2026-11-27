@@ -1,0 +1,56 @@
+plugins {
+    id 'dev.architectury.loom' version '1.13.469'
+    id 'java'
+}
+
+version = project.mod_version
+group = project.maven_group
+base { archivesName = project.archives_base_name }
+
+repositories {
+    mavenCentral()
+    maven { name = 'Fabric'; url = 'https://maven.fabricmc.net/' }
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    mappings loom.officialMojangMappings()
+    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+
+    // Cobblemon is provided by the game instance at runtime.
+    modCompileOnly files(project.cobblemon_jar)
+    // Cobblemon's API exposes Kotlin types (Unit, Function1...).
+    compileOnly "org.jetbrains.kotlin:kotlin-stdlib:2.0.21"
+}
+
+java {
+    toolchain { languageVersion = JavaLanguageVersion.of(21) }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    it.options.release = 21
+    it.options.encoding = 'UTF-8'
+}
+
+processResources {
+    inputs.property "version", project.version
+    filesMatching("fabric.mod.json") {
+        expand "version": project.version
+    }
+}
+
+// Copies the remapped jar into a mods folder, removing older builds of this mod first.
+def deployTo = { String taskName, String dir, String desc ->
+    tasks.register(taskName, Copy) {
+        group = 'distribution'
+        description = desc
+        dependsOn remapJar
+        from remapJar.archiveFile
+        into dir
+        doFirst {
+            fileTree(dir).matching { include "${project.archives_base_name}-*.jar" }.each { it.delete() }
+        }
+    }
+}
+deployTo('deployToInstance', project.instance_mods_dir, 'Copies the mod into the Tropimon client instance.')
