@@ -31,9 +31,3 @@ L'objet est construit par le code de Cobblemon lui-même : mêmes ingrédients a
 `cobblemon:recipe_filters/bait_seasoning`), 3 assaisonnements au maximum, et les mêmes traitements que la recette de la
 marmite, dans le même ordre (couleur, ingrédients, effets d'appât pour le snack ; effets d'appât et couleur pour l'appât).
 
-## Build
-
-```
-./gradlew build              # build/libs/snacklab-<version>.jar
-./gradlew deployToInstance   # copie dans l'instance Prism Tropimon
-```
